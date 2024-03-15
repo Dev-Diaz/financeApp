@@ -1,0 +1,11 @@
+Eslint - garante a qualidade do codigo escrito, nao deixa passar algumas coisas no commit como
+por exemplo variaveis que nao estao sendo usadas, usando funcao normal ao inves de arrow function
+
+Prettier - Extensao vscode para formatar o codigo ao salvar seguindo alguns padroes de espacamento,
+ponto e virgula etc.
+
+Husky - permite que eu rode alguns scrips antes de dar o commit, exemplo ele executa o Eslint
+para verificar a qualidade do codigo se retornar inconsistencias ele nao faz o commit
+
+lint-staged - permite que somente os arquivos que vao subir no commit sejam analisados
+ao inves de percorrer o projeto interio.
