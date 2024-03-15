@@ -9,3 +9,6 @@ para verificar a qualidade do codigo se retornar inconsistencias ele nao faz o c
 
 lint-staged - permite que somente os arquivos que vao subir no commit sejam analisados
 ao inves de percorrer o projeto interio.
+
+git-commit-msg-linter - verifica se os commits estao seguindo o padrao conventional commits
+exemplo: git commit -m "chore: add setup husky"
