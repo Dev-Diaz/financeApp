@@ -12,3 +12,6 @@ ao inves de percorrer o projeto interio.
 
 git-commit-msg-linter - verifica se os commits estao seguindo o padrao conventional commits
 exemplo: git commit -m "chore: add setup husky"
+
+eslint-config-prettier - lib usada para quando voce quiser evitar os conflitos de regras
+entre o Eslint e o prettier.
