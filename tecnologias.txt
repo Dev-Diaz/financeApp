@@ -5,7 +5,8 @@ Prettier - Extensao vscode para formatar o codigo ao salvar seguindo alguns padr
 ponto e virgula etc.
 
 Husky - permite que eu rode alguns scrips antes de dar o commit, exemplo ele executa o Eslint
-para verificar a qualidade do codigo se retornar inconsistencias ele nao faz o commit
+para verificar a qualidade do codigo se retornar inconsistencias ele nao faz o commit.
+https://github.com/typicode/husky/releases/tag/v9.0.1
 
 lint-staged - permite que somente os arquivos que vao subir no commit sejam analisados
 ao inves de percorrer o projeto interio.
