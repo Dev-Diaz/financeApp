@@ -1,24 +1,29 @@
 import validator from 'validator'
-import { badRequest, ok, serverError } from './helpers.js'
+import { badRequest, ok, serverError } from './helpers/http.js'
 import { UpdateUserUseCase } from '../use-cases/update-user.js'
 import { EmailAlreadyInUseError } from '../errors/user.js'
+import {
+    checkIfEmailIsValid,
+    checkPasswordIsStrong,
+    emailIsAlreadyInUseResponse,
+    invalidIdResponse,
+    invalidPasswordResponse,
+} from './helpers/user.js'
 
 export class UpdateUserController {
     async execute(httpResquest) {
         try {
-            const updateUserParams = httpResquest.body
+            const params = httpResquest.body
             const userId = httpResquest.params.userId
             const isIdValid = validator.isUUID(userId)
 
             if (!isIdValid) {
-                return badRequest({
-                    message: 'The provided id is not valid!',
-                })
+                return invalidIdResponse()
             }
 
             const allowFields = ['first_name', 'last_name', 'email', 'password']
 
-            const someFieldIsNotAllowed = Object.keys(updateUserParams).some(
+            const someFieldIsNotAllowed = Object.keys(params).some(
                 (key) => !allowFields.includes(key),
             )
 
@@ -28,28 +33,21 @@ export class UpdateUserController {
                 })
             }
 
-            if (updateUserParams.password) {
-                const passwordIsStrong = updateUserParams.password.length > 8
+            if (params.password) {
+                const passwordIsStrong = checkPasswordIsStrong(params.password)
                 if (!passwordIsStrong) {
-                    return badRequest({
-                        message: 'Password must be 8 characters or more.',
-                    })
+                    return invalidPasswordResponse()
                 }
             }
 
-            if (updateUserParams.email) {
-                const emailIsValid = validator.isEmail(updateUserParams.email)
+            if (params.email) {
+                const emailIsValid = checkIfEmailIsValid()
                 if (!emailIsValid) {
-                    return badRequest({
-                        message: 'Invalid email format.',
-                    })
+                    return emailIsAlreadyInUseResponse(params.email)
                 }
             }
             const updateUserUseCase = new UpdateUserUseCase()
-            const updatedUser = await updateUserUseCase.execute(
-                userId,
-                updateUserParams,
-            )
+            const updatedUser = await updateUserUseCase.execute(userId, params)
 
             return ok(updatedUser)
         } catch (error) {

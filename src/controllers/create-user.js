@@ -1,7 +1,12 @@
 import { CreateUserUseCase } from '../use-cases/create-user.js'
-import validator from 'validator'
-import { badRequest, created, serverError } from './helpers.js'
+import { badRequest, created, serverError } from './helpers/http.js'
 import { EmailAlreadyInUseError } from '../errors/user.js'
+import {
+    checkIfEmailIsValid,
+    checkPasswordIsStrong,
+    emailIsAlreadyInUseResponse,
+    invalidPasswordResponse,
+} from './helpers/user.js'
 
 export class CreateUserController {
     async execute(httpResquest) {
@@ -20,15 +25,11 @@ export class CreateUserController {
                     return badRequest({ message: `Missing Param: ${field}` })
             }
 
-            const passwordIsStrong = params.password.length > 8
-            if (!passwordIsStrong)
-                return badRequest({
-                    message: 'Password must be 8 characters or more.',
-                })
+            const passwordIsStrong = checkPasswordIsStrong(params.password)
+            if (!passwordIsStrong) return invalidPasswordResponse()
 
-            const emailIsValid = validator.isEmail(params.email)
-            if (!emailIsValid)
-                return badRequest({ message: 'Invalid email format.' })
+            const emailIsValid = checkIfEmailIsValid(params.email)
+            if (!emailIsValid) return emailIsAlreadyInUseResponse()
 
             //chamar use case
             const createdUserUseCase = new CreateUserUseCase()
