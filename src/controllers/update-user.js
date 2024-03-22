@@ -1,9 +1,9 @@
-import validator from 'validator'
 import { badRequest, ok, serverError } from './helpers/http.js'
 import { UpdateUserUseCase } from '../use-cases/update-user.js'
 import { EmailAlreadyInUseError } from '../errors/user.js'
 import {
     checkIfEmailIsValid,
+    checkIfIdIsValid,
     checkPasswordIsStrong,
     emailIsAlreadyInUseResponse,
     invalidIdResponse,
@@ -13,15 +13,16 @@ import {
 export class UpdateUserController {
     async execute(httpResquest) {
         try {
-            const params = httpResquest.body
             const userId = httpResquest.params.userId
-            const isIdValid = validator.isUUID(userId)
+            const isIdValid = checkIfIdIsValid(userId)
 
             if (!isIdValid) {
                 return invalidIdResponse()
             }
 
             const allowFields = ['first_name', 'last_name', 'email', 'password']
+
+            const params = httpResquest.body
 
             const someFieldIsNotAllowed = Object.keys(params).some(
                 (key) => !allowFields.includes(key),
