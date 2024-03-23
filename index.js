@@ -3,6 +3,7 @@ import express from 'express'
 import { GetUserByIdController } from './src/controllers/get-user-by-id.js'
 import { CreateUserController } from './src/controllers/create-user.js'
 import { UpdateUserController } from './src/controllers/update-user.js'
+import { DeleteUserController } from './src/controllers/delete-user.js'
 
 const app = express()
 
@@ -26,6 +27,14 @@ app.get('/api/users/:userId', async (request, response) => {
     const getUserByIdController = new GetUserByIdController()
 
     const { statuscode, body } = await getUserByIdController.execute(request)
+
+    response.status(statuscode).send(body)
+})
+
+app.delete('/api/users/:userId', async (request, response) => {
+    const deleteUserController = new DeleteUserController()
+
+    const { statuscode, body } = await deleteUserController.execute(request)
 
     response.status(statuscode).send(body)
 })
