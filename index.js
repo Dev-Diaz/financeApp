@@ -6,8 +6,10 @@ import { UpdateUserController } from './src/controllers/update-user.js'
 import { DeleteUserController } from './src/controllers/delete-user.js'
 import { GetUserByIdUseCase } from './src/use-cases/get-user-by-id.js'
 import { PostgresGetUserByIdRepository } from './src/repositories/postgres/get-user-by-id.js'
+import { PostgresCreateUserRepository } from './src/repositories/postgres/create-user.js'
 import { DeleteUserUseCase } from './src/use-cases/delete-user.js'
 import { CreateUserUseCase } from './src/use-cases/create-user.js'
+import { PostgresGetUserByEmailRepository } from './src/repositories/postgres/get-user-by-email.js'
 
 const app = express()
 
@@ -26,8 +28,12 @@ app.get('/api/users/:userId', async (request, response) => {
 })
 
 app.post('/api/users', async (request, response) => {
-    const createUserRepository = new PostgresGetUserByIdRepository()
-    const createUserUseCase = new CreateUserUseCase(createUserRepository)
+    const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
+    const createUserRepository = new PostgresCreateUserRepository()
+    const createUserUseCase = new CreateUserUseCase(
+        getUserByEmailRepository,
+        createUserRepository,
+    )
     const createUserController = new CreateUserController(createUserUseCase)
 
     const { statuscode, body } = await createUserController.execute(request)
