@@ -1,4 +1,3 @@
-import { CreateUserUseCase } from '../use-cases/create-user.js'
 import { badRequest, created, serverError } from './helpers/http.js'
 import { EmailAlreadyInUseError } from '../errors/user.js'
 import {
@@ -9,6 +8,9 @@ import {
 } from './helpers/user.js'
 
 export class CreateUserController {
+    constructor(createUserUseCase) {
+        this.createUserUseCase = createUserUseCase
+    }
     async execute(httpResquest) {
         try {
             const params = httpResquest.body
@@ -32,9 +34,8 @@ export class CreateUserController {
             if (!emailIsValid) return emailIsAlreadyInUseResponse()
 
             //chamar use case
-            const createdUserUseCase = new CreateUserUseCase()
 
-            const createdUser = await createdUserUseCase.execute(params)
+            const createdUser = await this.createUserUseCase.execute(params)
 
             //retornar a respota (status code)
 
