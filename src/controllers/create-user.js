@@ -37,6 +37,7 @@ export class CreateUserController {
             const createdUser = await createdUserUseCase.execute(params)
 
             //retornar a respota (status code)
+
             return created(createdUser)
         } catch (error) {
             if (error instanceof EmailAlreadyInUseError) {
