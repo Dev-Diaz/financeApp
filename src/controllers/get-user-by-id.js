@@ -1,6 +1,10 @@
-import { notFound, ok, serverError } from './helpers/http.js'
+import { ok, serverError } from './helpers/http.js'
 import { GetUserByIdUseCase } from '../use-cases/get-user-by-id.js'
-import { checkIfIdIsValid, invalidIdResponse } from './helpers/user.js'
+import {
+    checkIfIdIsValid,
+    invalidIdResponse,
+    userNotFoundResponse,
+} from './helpers/user.js'
 
 export class GetUserByIdController {
     async execute(httpResquest) {
@@ -18,9 +22,7 @@ export class GetUserByIdController {
             )
 
             if (!user) {
-                return notFound({
-                    message: 'User not found!',
-                })
+                return userNotFoundResponse()
             }
 
             return ok(user)

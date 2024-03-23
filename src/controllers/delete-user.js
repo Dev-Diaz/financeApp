@@ -1,11 +1,16 @@
-import { notFound, ok, serverError } from './helpers/http.js'
-import { checkIfIdIsValid, invalidIdResponse } from './helpers/user.js'
+import { ok, serverError } from './helpers/http.js'
+import {
+    checkIfIdIsValid,
+    invalidIdResponse,
+    userNotFoundResponse,
+} from './helpers/user.js'
 import { DeleteUserUseCase } from '../use-cases/delete-user.js'
 
 export class DeleteUserController {
     async execute(httpResquest) {
         try {
-            const isIdValid = checkIfIdIsValid(httpResquest.params.userId)
+            const userId = httpResquest.params.userId
+            const isIdValid = checkIfIdIsValid(userId)
 
             if (!isIdValid) {
                 return invalidIdResponse()
@@ -13,14 +18,10 @@ export class DeleteUserController {
 
             const deleteUserUseCase = new DeleteUserUseCase()
 
-            const deletedUser = await deleteUserUseCase.execute(
-                httpResquest.params.userId,
-            )
+            const deletedUser = await deleteUserUseCase.execute(userId)
 
             if (!deletedUser) {
-                return notFound({
-                    message: 'User not found!',
-                })
+                return userNotFoundResponse()
             }
 
             return ok(deletedUser)
