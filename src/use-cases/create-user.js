@@ -19,12 +19,14 @@ export class CreateUserUseCase {
         const userId = uuidv4()
         //criptografar senha
         const hashedPassword = await bcrypt.hash(createUserParams.password, 10)
+
         //inserir usuario no banco de dados
         const user = {
             id: userId,
-            password: hashedPassword,
             ...createUserParams,
+            password: hashedPassword,
         }
+
         //chamar o repositorio
         const createUser = await this.createUserRepository.execute(user)
         console.log(createUser)
