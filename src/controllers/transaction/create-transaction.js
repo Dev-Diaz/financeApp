@@ -1,6 +1,6 @@
 import validator from 'validator'
-import { badRequest, created, serverError } from '../helpers/http'
-import { checkIfIdIsValid, invalidIdResponse } from '../helpers/user'
+import { badRequest, created, serverError } from '../helpers/http.js'
+import { checkIfIdIsValid, invalidIdResponse } from '../helpers/user.js'
 
 export class CreateTransactionController {
     constructor(createTransactionUseCase) {
@@ -11,18 +11,13 @@ export class CreateTransactionController {
             //parametros recebidos pela requisicao
             const params = httpRequest.body
             //definicao dos campos obrigatorios
-            const requiredFields = [
-                'id',
-                'user_id',
-                'name',
-                'date',
-                'password',
-                'amount',
-                'type',
-            ]
+            const requiredFields = ['user_id', 'name', 'date', 'amount', 'type']
             //loop para verificar se os campos obrigatorios existem na requisicao
             for (const field of requiredFields) {
-                if (!params[field] || params[field].trim().length === 0)
+                if (
+                    !params[field] ||
+                    params[field].toString().trim().length === 0
+                )
                     return badRequest({ message: `Missing Param: ${field}` })
             }
             //verificar se o id do usuario e valido
@@ -60,10 +55,12 @@ export class CreateTransactionController {
                     message: 'Type must be EARNING, EXPENSE or INVESTMENT',
                 })
             //chama o use case para criar a transacao
-            const transaction = await this.createTransactionUseCase.execute(
+
+            const transaction = await this.createTransactionUseCase.execute({
                 ...params,
                 type,
-            )
+            })
+
             return created(transaction)
         } catch (error) {
             console.error(error)

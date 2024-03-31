@@ -8,7 +8,7 @@ export class CreateTransactionUseCase {
     }
     async execute(createTransactionParams) {
         //validar se o usuario existe
-        const userId = createTransactionParams.userId
+        const userId = createTransactionParams.user_id
 
         const userExists = await this.getUserByIdRepository.execute(userId)
         if (!userExists) {
