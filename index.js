@@ -7,6 +7,7 @@ import {
     makeUpdateUserController,
 } from './src/factories/controllers/user.js'
 import {
+    makeDeleteTransactionController,
     makeGetTransactionByUserIdController,
     makeTransactionController,
     makeUpdateTransactionController,
@@ -58,6 +59,14 @@ app.patch(
         response.status(statuscode).send(body)
     },
 )
+
+//Deletar transação
+app.delete('/api/transactions/:transactionId', async (request, response) => {
+    const deleteTransactionController = makeDeleteTransactionController()
+    const { statuscode, body } =
+        await deleteTransactionController.execute(request)
+    response.status(statuscode).send(body)
+})
 
 //Atualizar usuário
 app.patch('/api/users/:userId', async (request, response) => {

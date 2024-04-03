@@ -1,4 +1,5 @@
 import { ok, serverError } from '../helpers/http.js'
+import { transactionNotFoundResponse } from '../helpers/transaction.js'
 import { checkIfIdIsValid, invalidIdResponse } from '../helpers/validations.js'
 
 export class DeleteTransactionController {
@@ -15,7 +16,9 @@ export class DeleteTransactionController {
 
             const deletedTransaction =
                 await this.deleteTransactionUseCase.execute(transactionId)
-
+            if (!deletedTransaction) {
+                return transactionNotFoundResponse()
+            }
             return ok(deletedTransaction)
         } catch (error) {
             console.error(error)
