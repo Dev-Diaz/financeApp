@@ -37,7 +37,8 @@ export class CreateTransactionController {
 
             //chama o validator para verificar se o amount e valido, seguindo algumas
             //regras da biblioteca validator
-            const amountIsValid = checkIfAmountIsValid(params.amount.toString())
+            const amountIsValid = checkIfAmountIsValid(params.amount)
+            console.log(params)
             //se o amount for invalido retornar erro padrao badRequest()
             if (!amountIsValid) return invalidAmountResponse()
             //tira os espacos do tipo e converte para maiuscula
