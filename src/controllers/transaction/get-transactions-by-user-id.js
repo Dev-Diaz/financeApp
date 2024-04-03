@@ -5,9 +5,9 @@ import {
     checkIfIdIsValid,
     invalidIdResponse,
     requiredFieldsMissingResponse,
-} from '../helpers/validations'
+} from '../helpers/validations.js'
 
-export class GetTransactionByUserId {
+export class GetTransactionByUserIdController {
     constructor(GetTransactionsByUserIdUseCase) {
         this.getTransactionsByUserIdUseCase = GetTransactionsByUserIdUseCase
     }
