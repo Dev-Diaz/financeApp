@@ -6,7 +6,10 @@ import {
     emailIsAlreadyInUseResponse,
     invalidPasswordResponse,
 } from '../helpers/user.js'
-import { validationRequiredFields } from '../helpers/validations.js'
+import {
+    requiredFieldsMissingResponse,
+    validationRequiredFields,
+} from '../helpers/validations.js'
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -27,9 +30,7 @@ export class CreateUserController {
                 validationRequiredFields(params, requiredFields)
 
             if (requiredFieldProvided === false) {
-                return badRequest({
-                    message: `The field ${fieldMissing} is required.`,
-                })
+                return requiredFieldsMissingResponse(fieldMissing)
             }
 
             const passwordIsStrong = checkPasswordIsStrong(params.password)

@@ -3,6 +3,7 @@ import { badRequest, created, serverError } from '../helpers/http.js'
 import {
     checkIfIdIsValid,
     invalidIdResponse,
+    requiredFieldsMissingResponse,
     validationRequiredFields,
 } from '../helpers/validations.js'
 
@@ -21,18 +22,14 @@ export class CreateTransactionController {
                 validationRequiredFields(params, requiredFields)
 
             if (requiredFieldProvided === false) {
-                return badRequest({
-                    message: `The field ${fieldMissing} is required.`,
-                })
+                return requiredFieldsMissingResponse(fieldMissing)
             }
 
             //verificar se o id do usuario e valido
             const userIdIsValid = checkIfIdIsValid(params.user_id)
             //se nao for valido retornar erro padrao invalidIdResponse()
             if (!userIdIsValid) return invalidIdResponse()
-            //se o campo amount for menor ou igual a zero retornar erro padrao badRequest()
-            if (params.amount <= 0)
-                return badRequest({ message: 'Amount must be greater than 0' })
+
             //chama o validator para verificar se o amount e valido, seguindo algumas
             //regras da biblioteca validator
             const amountIsValid = validator.isCurrency(
