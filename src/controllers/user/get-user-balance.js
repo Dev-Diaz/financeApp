@@ -1,6 +1,6 @@
-import { UserNotFoundError } from '../../errors/user'
+import { UserNotFoundError } from '../../errors/user.js'
 import { ok, serverError } from '../helpers/http.js'
-import { userNotFoundResponse } from '../helpers/user'
+import { userNotFoundResponse } from '../helpers/user.js'
 import { checkIfIdIsValid, invalidIdResponse } from '../helpers/validations.js'
 
 export class GetUserBalanceController {

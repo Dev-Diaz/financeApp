@@ -55,8 +55,6 @@ export class CreateTransactionController {
                 type,
             })
 
-            console.log(transaction)
-
             return created(transaction)
         } catch (error) {
             console.error(error)
